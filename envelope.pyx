@@ -1,3 +1,7 @@
+"""
+envelopes adjusts the volume envelope over a sound
+"""
+
 def adsr(   int offset, int size, np.ndarray buffer, 
             float attack=0.1,float decay=0.1,float sustain=1.0, float release=0.5, 
             float again=0.0, float sgain=0.0, float noisefloor=NOISE_FLOOR ):
@@ -58,5 +62,42 @@ def gain( int offset, int size, np.ndarray buffer, float gain=0.0 ):
     for i in range(size):
         buffer[i] *= db(gain)
 
+    return buffer
+    
+def fade( int offset, int size, np.ndarray buffer, float prefade=0.0, gainfrom=0.0, fadelength=1.0, gainto=NOISE_FLOOR ):
+    """Fade a sound from one volume to another. Fade is linear in the dB scale.
+    
+    prefade: how long before the fade begins in seconds
+    gainfrom: the initial gain level before the fade begins
+    fadelength: how long the fade occurs over
+    gainto: the final gain levelin the fade
+    """
+    assert buffer.dtype == DTYPE
+    assert buffer.shape[0] >= size
+    
+    # time conversions
+    cdef float toffset = offset * SAMPLE_TIME
+    cdef float tsize = size * SAMPLE_TIME
+    cdef float ti = toffset
+    cdef float tend = toffset+tsize
+    
+    # counter across our buffer
+    cdef int i=0
+    cdef float gain=0.0
+    
+    for i in range(size):
+        # if we are less than 1/2 wavelength, -ve. else +ve
+        if ti<prefade:
+            gain = gainfrom
+        elif ti<prefade+fadelength:
+            # fade
+            gain = ((gainto - gainfrom)/fadelength) * (ti-prefade) + gainfrom
+        else:
+            gain = gainto
+            
+        buffer[i] *= db(gain)
+            
+        ti += SAMPLE_TIME
+    
     return buffer
     
