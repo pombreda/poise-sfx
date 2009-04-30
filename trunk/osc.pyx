@@ -1,4 +1,17 @@
+"""
+Buffer rendering code. Renders waveforms as floats into a numpy buffer.
 
+Renderers all take the following arguments:
+
+offset: the offset to begin rendering the wave at. Measured in samples.
+size: number of samples to render
+buffer: a pre-existing numpy float buffer to render into.
+
+Other options that they may have...
+
+freq: The frequency of the wave in Hz
+gain: The gain of the wave in decibels (0dB is a peak to peak intensity of 2.0 (-1.0 to 1.0))
+"""
 
 def sine(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0.0):
     """Return a buffer with a sine wave in it. The buffer is size long and starts at 'offset'
@@ -26,7 +39,7 @@ def sawtooth(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
     cdef float tend = toffset+tsize
     cdef int i=0
     cdef float val = 0.0
-    cdef float div
+    cdef int div
     cdef int divexp
     cdef float wavelength = 1.0/freq
     for i in range(size):
@@ -44,4 +57,78 @@ def sawtooth(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
         ti += SAMPLE_TIME
         
     return buffer
+
+def square(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0.0):
+    """Return a buffer with a square waveform in it."""
+    assert buffer.dtype == DTYPE
+    assert buffer.shape[0] >= size
     
+    # value for signal
+    cdef float signal = 1.0 * dB(gain)
+    
+    # time conversions
+    cdef float toffset = offset * SAMPLE_TIME
+    cdef float tsize = size * SAMPLE_TIME
+    cdef float ti = toffset
+    cdef float tend = toffset+tsize
+    
+    # counter across our buffer
+    cdef int i=0
+    cdef float wavelength = 1.0/freq
+    
+    # divisor for routine
+    cdef int divexp
+    cdef int div
+    
+    for i in range(size):
+        # quickly bring back into range 0 - wavelength
+        for divexp in range(5,0,-1):
+            div = 10 ** divexp
+            while ti>wavelength*float(div):
+                ti -= wavelength*float(div)
+                
+        # if we are less than 1/2 wavelength, -ve. else +ve
+        if ti<wavelength/2.0:
+            buffer[i] = -signal
+        else:
+            buffer[i] = signal
+            
+        ti += SAMPLE_TIME
+    
+    return buffer
+
+def triangle(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0.0):
+    """Return a buffer with a sawtooth waveform in it. The render is windowed according to 'offset' and 'size' """
+    assert buffer.dtype == DTYPE
+    assert buffer.shape[0] >= size
+    
+    cdef float toffset = offset * SAMPLE_TIME
+    cdef float tsize = size * SAMPLE_TIME
+    cdef float ti = toffset
+    cdef float tend = toffset+tsize
+    cdef int i=0
+    cdef float val = 0.0
+    cdef int div
+    cdef int divexp
+    cdef float wavelength = 1.0/freq
+    for i in range(size):
+        # quickly bring back into range 0 - wavelength
+        for divexp in range(5,0,-1):
+            div = 10 ** divexp
+            while ti>wavelength*float(div):
+                ti -= wavelength*float(div)
+                
+        # work out value
+        if ti<wavelength/4.0:
+            val = ti * (4.0/wavelength)
+        elif ti<3.0*wavelength/4.0:
+            val = ti * (-4.0/wavelength) + 2.0
+        else:
+            val = ti * (4.0/wavelength) -4.0
+        
+        buffer[i] = val * dB(gain)
+        
+        ti += SAMPLE_TIME
+        
+    return buffer
+
