@@ -7,7 +7,7 @@ Python Oldskool Ingame Sound Effects
 Support library. Quickly calculates buffers. manipulates buffers. 
 """
 
-cdef int NUM_SINE_VALUES = 4096
+cdef int NUM_SINE_VALUES = 8192
 cdef np.ndarray SINE_TABLE = np.zeros([NUM_SINE_VALUES, 1], dtype=DTYPE)
 
 def fill_sine():
@@ -21,12 +21,12 @@ def fill_sine():
 fill_sine()
 
 # calculate sin by looking up the closest value
-def sin_(float theta):
+def sin(float theta):
     cdef float x = theta*float(NUM_SINE_VALUES)/(2.*math.pi) + 2.0 * math.pi / float(NUM_SINE_VALUES)
     cdef float answer = SINE_TABLE[int(x)%NUM_SINE_VALUES]
     return answer
     
-def sin(float theta):
+def sin_true(float theta):
     cdef float answer = math.sin(theta)
     return answer
     
