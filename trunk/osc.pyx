@@ -21,11 +21,20 @@ def sine(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0
     assert buffer.shape[0] >= size
     
     cdef float val=0.0
-    cdef int count=0
-    while count<size:
-        val = sin(float(count+offset)*freq*SAMPLE_TIME)
-        buffer[count] = (val * db(gain))
-        count += 1
+    cdef int i=0
+    cdef float ti = i * SAMPLE_TIME
+    cdef float wavelength = 1.0/freq
+    for i in range(size):
+        # quickly bring back into range 0 - wavelength
+        for divexp in range(5,0,-1):
+            div = 10 ** divexp
+            while ti>wavelength*float(div):
+                ti -= wavelength*float(div)
+        val = sin(float(ti+offset)*freq*SAMPLE_TIME)
+        buffer[i] = (val * dB(gain))
+        
+        ti += SAMPLE_TIME
+        
     return buffer
     
 def sawtooth(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0.0):
