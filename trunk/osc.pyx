@@ -20,9 +20,12 @@ def sine(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0
     assert buffer.dtype == DTYPE
     assert buffer.shape[0] >= size
     
+    cdef float toffset = offset * SAMPLE_TIME
+    cdef float tsize = size * SAMPLE_TIME
+    
     cdef float val=0.0
     cdef int i=0
-    cdef float ti = i * SAMPLE_TIME
+    cdef float ti = toffset
     cdef float wavelength = 1.0/freq
     for i in range(size):
         # quickly bring back into range 0 - wavelength
@@ -30,7 +33,7 @@ def sine(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0
             div = 10 ** divexp
             while ti>wavelength*float(div):
                 ti -= wavelength*float(div)
-        val = sin(float(ti+offset)*freq*SAMPLE_TIME)
+        val = sin( 2.0*math.pi*ti/wavelength )
         buffer[i] = (val * dB(gain))
         
         ti += SAMPLE_TIME
