@@ -21,9 +21,13 @@ def fill_sine():
 fill_sine()
 
 # calculate sin by looking up the closest value
-def sin(float theta):
+def sin_(float theta):
     cdef float x = theta*float(NUM_SINE_VALUES)/(2.*math.pi) + 2.0 * math.pi / float(NUM_SINE_VALUES)
     cdef float answer = SINE_TABLE[int(x)%NUM_SINE_VALUES]
+    return answer
+    
+def sin(float theta):
+    cdef float answer = math.sin(theta)
     return answer
     
 def cos(float theta):

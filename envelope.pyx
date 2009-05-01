@@ -46,7 +46,7 @@ def adsr(   int offset, int size, np.ndarray buffer,
             #end
             gain = noisefloor
         
-        buffer[i] *= db(gain)
+        buffer[i] *= dB(gain)
         
         ti += SAMPLE_TIME
         i += 1
@@ -60,7 +60,7 @@ def gain( int offset, int size, np.ndarray buffer, float gain=0.0 ):
     
     cdef i=0
     for i in range(size):
-        buffer[i] *= db(gain)
+        buffer[i] *= dB(gain)
 
     return buffer
     
@@ -95,7 +95,7 @@ def fade( int offset, int size, np.ndarray buffer, float prefade=0.0, gainfrom=0
         else:
             gain = gainto
             
-        buffer[i] *= db(gain)
+        buffer[i] *= dB(gain)
             
         ti += SAMPLE_TIME
     
