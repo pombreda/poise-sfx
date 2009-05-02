@@ -1,0 +1,15 @@
+#summary POISE Oscillators
+
+The POISE oscillators are imported from poise.osc
+
+{{{
+from poise.osc import sine, square, triangle, sawtooth
+}}}
+
+Each is a python generator that will generate buffers.
+
+= Sine =
+
+{{{
+gen = sine( freq=82.0, gain=-6.0 )
+}}}
