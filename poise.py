@@ -22,33 +22,13 @@ pyglet.options['audio'] = ('openal', 'silent')
 
 from pyglet.media.procedural import ProceduralSource, AudioData
 import ctypes, math
+import buffers
+from osc import sine
+from envelope import adsr
 
 BUFFER_START_SIZE = 256*1024
 FLOAT_MAX = 1.0
 
-import buffers
-from buffers import dB
-from buffers import sine as sine_render_c
-
-# for profiling
-def sine_render(o,s,b,f,g):
-    return sine_render_c(o,s,b,f,g)
-
-def sine(freq=440.0,gain=0.0):
-    buffer = numpy.zeros([BUFFER_START_SIZE], numpy.float)
-    (offset,size) = yield buffer
-    
-    while True:
-        buffer = sine_render(offset, size, buffer, freq, gain)
-        (offset, size) = yield buffer
-
-def adsr(gen, attack=0.4, decay=0.8, sustain=2.0, release=2.5, again=0.0, sgain=-6.0, noisefloor=-96.0 ):
-    offset,size = yield
-    while True:
-        buffer = gen.send((offset,size))
-        buffer = buffers.adsr(offset,size,buffer,attack,decay,sustain,release,again,sgain,noisefloor)
-        offset, size = yield buffer
-            
 class PoiseSource(ProceduralSource):
     def __init__(self, duration, **kwargs):
         super(PoiseSource,self).__init__(duration, **kwargs)
