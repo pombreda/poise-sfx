@@ -61,15 +61,10 @@ def sawtooth(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
     cdef float tend = toffset+tsize
     cdef int i=0
     cdef float val = 0.0
-    cdef int div
-    cdef int divexp
     cdef float wavelength = 1.0/freq
     for i in range(size):
         # quickly bring back into range 0 - wavelength
-        for divexp in range(5,0,-1):
-            div = 10 ** divexp
-            while ti>wavelength*float(div):
-                ti -= wavelength*float(div)
+        ti = frange( ti, 0.0, wavelength)
                 
         # work out value
         val = ti*2.0/wavelength-1.0
@@ -98,17 +93,10 @@ def square(int offset, int size, np.ndarray buffer, float freq=440.0, float gain
     cdef int i=0
     cdef float wavelength = 1.0/freq
     
-    # divisor for routine
-    cdef int divexp
-    cdef int div
-    
     for i in range(size):
         # quickly bring back into range 0 - wavelength
-        for divexp in range(5,0,-1):
-            div = 10 ** divexp
-            while ti>wavelength*float(div):
-                ti -= wavelength*float(div)
-                
+        ti = frange( ti, 0.0, wavelength)
+        
         # if we are less than 1/2 wavelength, -ve. else +ve
         if ti<wavelength/2.0:
             buffer[i] = -signal
@@ -130,16 +118,11 @@ def triangle(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
     cdef float tend = toffset+tsize
     cdef int i=0
     cdef float val = 0.0
-    cdef int div
-    cdef int divexp
     cdef float wavelength = 1.0/freq
     for i in range(size):
         # quickly bring back into range 0 - wavelength
-        for divexp in range(5,0,-1):
-            div = 10 ** divexp
-            while ti>wavelength*float(div):
-                ti -= wavelength*float(div)
-                
+        ti = frange( ti, 0.0, wavelength)
+        
         # work out value
         if ti<wavelength/4.0:
             val = ti * (4.0/wavelength)
