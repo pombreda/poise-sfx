@@ -23,8 +23,8 @@ pyglet.options['audio'] = ('openal', 'silent')
 from pyglet.media.procedural import ProceduralSource, AudioData
 import ctypes, math
 import buffers
-from osc import sine
-from envelope import adsr
+import osc
+import envelope
 
 BUFFER_START_SIZE = 256*1024
 FLOAT_MAX = 1.0
