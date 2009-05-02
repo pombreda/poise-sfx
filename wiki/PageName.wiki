@@ -1,5 +1,0 @@
-#summary How to write out wav files
-
-= Writing WAV Files =
-
-Here is how you write wav sample files out of your sound effects.
