@@ -13,6 +13,8 @@ freq: The frequency of the wave in Hz
 gain: The gain of the wave in decibels (0dB is a peak to peak intensity of 2.0 (-1.0 to 1.0))
 """
 
+cdef float pi = 3.14159265328
+
 def sine(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0.0):
     """Return a buffer with a sine wave in it. The buffer is size long and starts at 'offset'
     samples in. The wave has a frequency of 'freq' Hz. 'gain' is the amplitude of the wave with
@@ -27,15 +29,23 @@ def sine(int offset, int size, np.ndarray buffer, float freq=440.0, float gain=0
     cdef int i=0
     cdef float ti = toffset
     cdef float wavelength = 1.0/freq
+    
+    cdef int divexp
+    cdef int div
+    
+    cdef float multi = db(gain)
+    
     for i in range(size):
         # quickly bring back into range 0 - wavelength
-        for divexp in range(5,0,-1):
-            div = 10 ** divexp
-            while ti>wavelength*float(div):
-                ti -= wavelength*float(div)
-        val = sin( 2.0*math.pi*ti/wavelength )
-        buffer[i] = (val * dB(gain))
+        ti = frange( ti, 0.0, wavelength)
         
+        # calculate sin value
+        val = sin( 2.0*pi*ti/wavelength )
+        
+        # store with gain
+        buffer[i] = (val * multi)
+        
+        # increase dt
         ti += SAMPLE_TIME
         
     return buffer

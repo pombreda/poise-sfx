@@ -28,13 +28,18 @@ FLOAT_MAX = 1.0
 
 import buffers
 from buffers import dB
+from buffers import sine as sine_render_c
+
+# for profiling
+def sine_render(o,s,b,f,g):
+    return sine_render_c(o,s,b,f,g)
 
 def sine(freq=440.0,gain=0.0):
     buffer = numpy.zeros([BUFFER_START_SIZE], numpy.float)
     (offset,size) = yield buffer
     
     while True:
-        buffer = buffers.sine(offset, size, buffer, freq, gain)
+        buffer = sine_render(offset, size, buffer, freq, gain)
         (offset, size) = yield buffer
         
 def adsr(gen, attack=0.1, decay=0.1, sustain=1.0, release=0.5, again=0.0, sgain=0.0, noisefloor=-96.0 ):
@@ -95,23 +100,47 @@ class PoiseSource(ProceduralSource):
             bias = 0    
             amplitude = 32767
         
+        store = numpy.zeros([samples], numpy.float)
+        for osc,intensity in self.oscillators:
+            buff = osc.send( (offset,samples) )
+            
+            # adjust gain on buffer
+            buff = buffers.gain( offset, samples, buff, gain=intensity )
+    
+            # accumulate
+            store += buff[:samples]
+    
+        FLOAT_MAX = 1.0
+        for i in range(samples):
+            value = store[i]
+            s=((value/FLOAT_MAX)*float(amplitude) + float(bias))
+                
+            data[i] = int(s)
+            #print data[i],",",
+            # remove finished oscillators
+            
+        return data
+        #return data    
+        
         results = []
         finished_list = []
         for osc, intensity in self.oscillators:
             # feed into the generator the next section parameters
             try:
                 # render a buffer through the generator chain
-                buff = osc.send( (offset,samples+1) )
+                buff = osc.send( (offset,samples) )
                 #print "buf=",buff
             except StopIteration, si:
                 finished_list.append( (osc,intensity) )
                 # todo: zero buffer[(osc,intensity)]
                 
             # ajdust buffer with gain
-            buff = buffers.gain( offset, samples+1, buff, gain=intensity )
+            buff = buffers.gain( offset, samples, buff, gain=intensity )
             
             # make a list of oscilator 'tracks' to be mixed
             results.append(buff)
+            
+        return data
         
         FLOAT_MAX = 1.0
         if len(results):
