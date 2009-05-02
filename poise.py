@@ -122,47 +122,6 @@ class PoiseSource(ProceduralSource):
         return data
         #return data    
         
-        results = []
-        finished_list = []
-        for osc, intensity in self.oscillators:
-            # feed into the generator the next section parameters
-            try:
-                # render a buffer through the generator chain
-                buff = osc.send( (offset,samples) )
-                #print "buf=",buff
-            except StopIteration, si:
-                finished_list.append( (osc,intensity) )
-                # todo: zero buffer[(osc,intensity)]
-                
-            # ajdust buffer with gain
-            buff = buffers.gain( offset, samples, buff, gain=intensity )
-            
-            # make a list of oscilator 'tracks' to be mixed
-            results.append(buff)
-            
-        return data
-        
-        FLOAT_MAX = 1.0
-        if len(results):
-            buffer = sum(results)
-            #print buffer
-            # fill in our samples
-            for i in range(samples):
-                value = buffer[i]
-                s=((value/FLOAT_MAX)*float(amplitude) + float(bias))
-                
-                data[i] = int(s)
-                #print data[i],",",
-                # remove finished oscillators
-                for osc,intensity in finished_list:
-                    self.oscillators.remove((osc,intensity))
-                
-            #print data[0]
-                
-        # return the buffer
-        return data
-        
-        
 if __name__=="__main__":
     from pyglet.media import Player
 
