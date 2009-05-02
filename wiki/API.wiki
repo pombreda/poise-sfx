@@ -12,8 +12,18 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> gen = poise.osc.sine(freq=881, gain=-3)
 >>> gen
 <generator object at 0x1d493a0>
+}}}
+
+If we call next(), we get it's allocated empty buffer
+
+{{{
 >>> gen.next()
 array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
+}}}
+
+This buffer is used over and over again on subsequent calls, and will be modified inplace. Using send(), we send the generator a tuple of (offset, size), and it will render into the buffer that part of the wave, and return the same buffer again. The buffer will probably be longer than the rendered data.
+
+{{{
 >>> gen.send( (0,100) )
 array([ 0.        ,  0.08126858,  0.16146266, ...,  0.        ,
         0.        ,  0.        ])
