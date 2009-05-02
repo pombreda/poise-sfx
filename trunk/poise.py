@@ -26,6 +26,8 @@ import buffers
 import osc
 import envelope
 
+import wave
+
 BUFFER_START_SIZE = 256*1024
 FLOAT_MAX = 1.0
 
