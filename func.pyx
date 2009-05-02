@@ -48,6 +48,9 @@ cdef frange( float var, float min, float max ):
     cdef int div
     cdef int divexp
     
+    if var<wavelength:
+        return var
+    
     # quickly bring back into range min to max
     for divexp in range(5,0,-1):
         div = 10 ** divexp

@@ -15,3 +15,4 @@ def sine(freq=440.0,gain=0.0):
     while True:
         buffer = sine_render(offset, size, buffer, freq, gain)
         (offset, size) = yield buffer
+        
