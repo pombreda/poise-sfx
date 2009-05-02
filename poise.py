@@ -42,12 +42,12 @@ def sine(freq=440.0,gain=0.0):
         buffer = sine_render(offset, size, buffer, freq, gain)
         (offset, size) = yield buffer
         
-def adsr(gen, attack=0.1, decay=0.1, sustain=1.0, release=0.5, again=0.0, sgain=0.0, noisefloor=-96.0 ):
+def adsr(gen, attack=0.4, decay=0.8, sustain=2.0, release=2.5, again=0.0, sgain=-6.0, noisefloor=-96.0 ):
     offset,size = yield
-    for buffer in gen:
+    while True:
+        buffer = gen.send((offset,size))
         buffer = buffers.adsr(offset,size,buffer,attack,decay,sustain,release,again,sgain,noisefloor)
         offset, size = yield buffer
-        gen.send(offset,size)
             
 class PoiseSource(ProceduralSource):
     def __init__(self, duration, **kwargs):
@@ -132,7 +132,9 @@ if __name__=="__main__":
 
     sfx = sine(220, gain=-6 )
     sfx.next()
-    poise.oscillators.append( (sfx, -6) )
+    envsfx = adsr(sfx)
+    envsfx.next()
+    poise.oscillators.append( (envsfx, -6) )
 
     from pyglet import app
     from pyglet import window
@@ -153,13 +155,5 @@ if __name__=="__main__":
         label.draw()
 
     from pyglet.window import key
-
-    #@win.event
-    #def on_key_press(symbol, modifiers):
-    #    if symbol == key._1:
-    #        poise.oscillators.append( (keysfx['1'](), dB(-12)) )
-    #    elif symbol == key._2:
-    #           poise.oscillators.append( (keysfx['2'](), dB(-12)) )
-
 
     app.run()
