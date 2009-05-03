@@ -27,7 +27,14 @@ sfx.next()
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.4,release=2.0)
 envsfx.next()
 
+# message
+sys.stdout.write("Writing %s ..."%filename)
+sys.stdout.flush()
+
 # save this out at -1dB
 wf = WaveFile()
 wf.oscillators.append( (envsfx, -1) )
 wf.save(filename,200000)
+
+# clean end
+sys.stdout.write("\n")
