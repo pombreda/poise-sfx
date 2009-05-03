@@ -6,9 +6,9 @@ poise = PoiseSource(999999999)
 player.queue(poise)
 player.play()
 
-sfx = osc.sine(440.0, gain=0 )
-sfx.next()
-envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.4,release=2.0)
+sfx = osc.sine(500.0, gain=0 )
+#sfx.next()
+envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.2,release=2.0)
 envsfx.next()
 poise.oscillators.append( (envsfx, -1) )
 
