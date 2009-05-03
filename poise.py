@@ -42,6 +42,14 @@ class PoiseSource(ProceduralSource):
         # set the cython extension rendering rate to this pyglet rate
         buffers.set_sample_rate(self.sample_rate)
         
+    def add( self, osc, intensity=0 ):
+        self.oscillators.append( (osc, intensity) )
+        
+    def remove( self, osc ):
+        keys = [k for k in self.oscillators if k[0]==osc]
+        assert len(keys)==1, "There should only be one instance of an oscillator"
+        del self.oscillators[keys[0]]
+        
     @property
     def sample_rate(self):
         return self.audio_format.sample_rate

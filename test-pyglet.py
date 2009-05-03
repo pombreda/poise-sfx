@@ -6,7 +6,7 @@ poise = PoiseSource(999999999)
 player.queue(poise)
 player.play()
 
-sfx = osc.sine(500.0, gain=0 )
+sfx = osc.sawtooth(500.0, gain=0 )
 #sfx.next()
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.2,release=2.0)
 envsfx.next()
