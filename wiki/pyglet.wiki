@@ -1,0 +1,7 @@
+#summary pyglet interface summary
+
+= Introduction =
+
+_this api is not implemented yet and is just here as a draft proposal_
+
+The pyglet interface to POISE is implemented as a custom pyglet sound `Source`. It behaves just like any other pyglet Source, and streams its mixed audio data. 
