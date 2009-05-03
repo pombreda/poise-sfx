@@ -25,6 +25,7 @@ import ctypes, math
 import buffers
 import osc
 import envelope
+from WaveFile import WaveFile
 
 import wave
 

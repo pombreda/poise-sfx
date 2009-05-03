@@ -1,16 +1,33 @@
 
+import wave, ctypes, numpy
+import buffers
 
 class WaveFile(object):
-    def __init__(self, duration, **kwargs):
+    def __init__(self, **kwargs):
         # the presently playing oscilators
         self.oscillators=[]
         
+        self.rate = 48000
+        
     def set_sample_rate(self,rate):
+        self.rate = rate
         return buffers.set_sample_rate(rate)
     
     def save(self, fh, length):
         # save this data to a wave file
-        data = self._generate_data(self, length)
+        data = self._generate_data(length)
+    
+        numchannels = 1
+        sampwidth = 2
+        framerate = self.rate
+        numframes = length
+        comptype = "NONE"
+        compname = None
+    
+        writer = wave.open(fh,"wb")
+        writer.setparams( (numchannels, sampwidth, framerate, numframes, comptype, compname) )
+        writer.writeframes( data )
+        writer.close()
     
     def _generate_data(self, samples, offset=0.0):
     
