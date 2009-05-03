@@ -9,6 +9,14 @@ class WaveFile(object):
         
         self.rate = 48000
         
+    def add( self, osc, intensity=0 ):
+        self.oscillators.append( (osc, intensity) )
+        
+    def remove( self, osc ):
+        keys = [k for k in self.oscillators if k[0]==osc]
+        assert len(keys)==1, "There should only be one instance of an oscillator"
+        del self.oscillators[keys[0]]
+        
     def set_sample_rate(self,rate):
         self.rate = rate
         return buffers.set_sample_rate(rate)

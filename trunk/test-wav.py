@@ -21,7 +21,6 @@ except IndexError, ie:
 
 # concert A sinewave
 sfx = osc.sine(440.0, gain=0 )
-sfx.next()
 
 # into an ADSR envelope
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.4,release=2.0)
@@ -33,7 +32,7 @@ sys.stdout.flush()
 
 # save this out at -1dB
 wf = WaveFile()
-wf.oscillators.append( (envsfx, -1) )
+wf.add( envsfx, -1 )
 wf.save(filename,200000)
 
 # clean end
