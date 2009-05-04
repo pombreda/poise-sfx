@@ -67,7 +67,7 @@ def sawtooth(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
         ti = frange( ti, 0.0, wavelength)
                 
         # work out value
-        val = ti*2.0/wavelength-1.0
+        val = 2.0*ti/wavelength-1.0
         
         buffer[i] = val * dB(gain)
         
