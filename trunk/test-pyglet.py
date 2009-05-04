@@ -28,6 +28,4 @@ def on_draw():
     win.clear()
     label.draw()
 
-from pyglet.window import key
-
 app.run()
