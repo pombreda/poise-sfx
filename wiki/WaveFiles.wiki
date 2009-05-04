@@ -13,6 +13,6 @@ envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.4,release=2.0)
 
 # write the wave to "test.wav", with length of 200,000 samples
 wf = WaveFile()
-wf.oscillators.append( (envsfx, -1) )
+wf.add( envsfx, -1 )
 wf.save("test.wav",200000)
 }}}
