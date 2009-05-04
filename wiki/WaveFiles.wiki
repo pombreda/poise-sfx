@@ -9,9 +9,7 @@ from poise import *
 
 # build the sound effect generator
 sfx = osc.sine(440.0, gain=0 )
-sfx.next()
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.4,release=2.0)
-envsfx.next()
 
 # write the wave to "test.wav", with length of 200,000 samples
 wf = WaveFile()
