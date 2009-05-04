@@ -14,22 +14,16 @@ Type "help", "copyright", "credits" or "license" for more information.
 <generator object at 0x1d493a0>
 }}}
 
-If we call next(), we get it's allocated empty buffer
+
+This buffer is used over and over again on subsequent calls, and will be modified inplace. Using send(), we send the generator a size, and it will render into the buffer that part of the wave, and return the same buffer again. The buffer will probably be longer than the rendered data.
 
 {{{
->>> gen.next()
-array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
-}}}
-
-This buffer is used over and over again on subsequent calls, and will be modified inplace. Using send(), we send the generator a tuple of (offset, size), and it will render into the buffer that part of the wave, and return the same buffer again. The buffer will probably be longer than the rendered data.
-
-{{{
->>> gen.send( (0,100) )
+>>> gen.send( 100 )
 array([ 0.        ,  0.08126858,  0.16146266, ...,  0.        ,
         0.        ,  0.        ])
->>> len(gen.send( (0,100) ))
+>>> len(gen.send( 100 ))
 262144
->>> gen.send( (0,100) )[:100]
+>>> gen.send( 100 )[:100]
 array([ 0.        ,  0.08126858,  0.16146266,  0.24003285,  0.31490079,
         0.38560531,  0.4516297 ,  0.51122761,  0.56406623,  0.60972321,
         0.64699072,  0.67570394,  0.69558454,  0.7061066 ,  0.70726931,
@@ -61,11 +55,8 @@ so for example, in the case above we could apply an envelope around the wave:
 
 {{{
 >>> gen = poise.osc.sine(freq=440, gain=-3)
->>> gen.next()
-array([ 0.,  0.,  0., ...,  0.,  0.,  0.])
 >>> gen2 = poise.envelope.adsr( gen, attack=0.1, decay=1.0, sustain=0.0, release=4.0 )
->>> gen2.next()
->>> gen2.send((0,100))[:100]
+>>> gen2.send(100)[:100]
 array([  0.00000000e+00,   6.46563917e-07,   1.29396554e-06,
          1.94005717e-06,   2.58268953e-06,   3.21970889e-06,
          3.84897835e-06,   4.46836660e-06,   5.07577775e-06,
