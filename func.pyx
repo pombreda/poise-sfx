@@ -52,7 +52,7 @@ cdef frange( float var, float min, float max ):
         return var
     
     # quickly bring back into range min to max
-    for divexp in range(5,0,-1):
+    for divexp in range(5,-1,-1):
         div = 10 ** divexp
         while var>wavelength*float(div):
             var -= wavelength*float(div)

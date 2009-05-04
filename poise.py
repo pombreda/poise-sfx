@@ -33,8 +33,8 @@ BUFFER_START_SIZE = 256*1024
 FLOAT_MAX = 1.0
 
 class PoiseSource(ProceduralSource):
-    def __init__(self, duration, **kwargs):
-        super(PoiseSource,self).__init__(duration, **kwargs)
+    def __init__(self, **kwargs):
+        super(PoiseSource,self).__init__(duration=99999999999999, **kwargs)
         
         # the presently playing oscilators
         self.oscillators=[]

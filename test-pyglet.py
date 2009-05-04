@@ -2,11 +2,11 @@ from poise import *
 from pyglet.media import Player
 
 player = Player()
-poise = PoiseSource(999999999)
+poise = PoiseSource()
 player.queue(poise)
 player.play()
 
-sfx = osc.sine(500.0, gain=0 )
+sfx = osc.sawtooth(500.0, gain=0 )
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.2,release=2.0)
 poise.add(envsfx, -1)
 
