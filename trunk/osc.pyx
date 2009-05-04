@@ -62,14 +62,14 @@ def sawtooth(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
     cdef int i=0
     cdef float val = 0.0
     cdef float wavelength = 1.0/freq
+    cdef float multi = db(gain)
     for i in range(size):
         # quickly bring back into range 0 - wavelength
         ti = frange( ti, 0.0, wavelength)
-                
         # work out value
         val = 2.0*ti/wavelength-1.0
         
-        buffer[i] = val * dB(gain)
+        buffer[i] = val * multi
         
         ti += SAMPLE_TIME
         
