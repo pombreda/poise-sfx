@@ -37,7 +37,7 @@ source.add(
 
 If the source is presently playing, the start of this sound will be immediate.
 
-When the generator chain terminates, the oscillator has finished and will be automatically expired from the source. The source will continue to play, and more oscillators can be added. The source is _not_ a queue. If more than one oscillator is added, the two oscillator signals is summed. This is the reason for the gain parameter to add(). This is the mix volume of that osciallator.
+When the generator chain terminates, the oscillator has finished and will be automatically expired from the source. The source will continue to play, and more oscillators can be added. The source is _not_ a queue. If more than one oscillator is added, the two oscillator signals are summed. This is the reason for the gain parameter to add(). This is the mix volume of that osciallator.
 
 If the generator chain never terminates, you will need to keep a handle on the generator to manipulate it.
 
