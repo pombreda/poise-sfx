@@ -93,7 +93,7 @@ class PoiseSource(ProceduralSource):
         
         store = numpy.zeros([samples], numpy.float)
         for osc,intensity in self.oscillators:
-            buff = osc.send( (offset,samples) )
+            buff = osc.send( samples )
             
             # adjust gain on buffer
             buff = buffers.gain( offset, samples, buff, gain=intensity )
@@ -111,5 +111,4 @@ class PoiseSource(ProceduralSource):
             # remove finished oscillators
             
         return data
-        #return data    
         

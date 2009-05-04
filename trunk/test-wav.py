@@ -20,11 +20,10 @@ except IndexError, ie:
     sys.exit(1)
 
 # concert A sinewave
-sfx = osc.sine(440.0, gain=0 )
+sfx = osc.sawtooth(440.0, gain=-3.0 )
 
 # into an ADSR envelope
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.4,release=2.0)
-envsfx.next()
 
 # message
 sys.stdout.write("Writing %s ..."%filename)
@@ -32,7 +31,7 @@ sys.stdout.flush()
 
 # save this out at -1dB
 wf = WaveFile()
-wf.add( envsfx, -1 )
+wf.add( sfx, -12.0 )
 wf.save(filename,200000)
 
 # clean end

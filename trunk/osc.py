@@ -5,29 +5,9 @@ from buffers import sawtooth as sawtooth_render
 from buffers import square as square_render
 from buffers import triangle as triangle_render
 
-BUFFER_START_SIZE = 512
-
-class module(object):
-    def __init__(self):
-        self.offset = 0             # our present position
-        self.buffer = None
+from lib import pod
         
-    def __iter__(self):
-        return self
-        
-    def next(self):
-        raise StopIteration
-        
-    def send(self, length):
-        raise StopIteration
-        
-    def _grow_buffer(self, length):
-        """If the buffer size is less than length, allocate a new buffer the size of length. 
-        zeros the buffer if it is reallocated"""
-        if self.buffer == None or self.buffer.shape[0] < length:
-            self.buffer = numpy.zeros( [length], numpy.float )
-        
-class oscillator(module):
+class oscillator(pod):
     RENDER_FUNC = None
     
     def __init__(self, freq=440.0, gain=0.0):
@@ -37,7 +17,6 @@ class oscillator(module):
         
     def send(self,length):
         # adjust buffer
-        o,length = length
         assert isinstance(length, int)
         self._grow_buffer(length)
         self.RENDER_FUNC(self.offset, length, self.buffer, self.freq, self.gain)
