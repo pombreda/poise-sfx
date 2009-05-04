@@ -8,7 +8,7 @@ player.play()
 
 sfx = osc.sine(500.0, gain=0 )
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.2,release=2.0)
-poise.oscillators.append( (envsfx, -1) )
+poise.add(envsfx, -1)
 
 from pyglet import app
 from pyglet import window
