@@ -4,6 +4,8 @@ from buffers import sine as sine_render
 from buffers import sawtooth as sawtooth_render
 from buffers import square as square_render
 from buffers import triangle as triangle_render
+from buffers import noise as noise_render
+from buffers import silence as silence_render
 
 from lib import pod
         
@@ -34,4 +36,25 @@ class square(oscillator):
 
 class triangle(oscillator):
     RENDER_FUNC = triangle_render
-
+    
+class silence(oscillator):
+    def send(self,length):
+        # adjust buffer
+        assert isinstance(length, int)
+        self._grow_buffer(length)
+        silence_render(self.offset, length, self.buffer)
+        self.offset += length
+        return self.buffer
+    
+class noise(oscillator):
+    def __init__(self, gain=0.0):
+        super(oscillator,self).__init__()
+        self.gain = gain
+        
+    def send(self,length):
+        # adjust buffer
+        assert isinstance(length, int)
+        self._grow_buffer(length)
+        noise_render(self.offset, length, self.buffer, self.gain)
+        self.offset += length
+        return self.buffer

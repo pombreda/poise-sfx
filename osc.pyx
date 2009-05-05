@@ -136,4 +136,24 @@ def triangle(int offset, int size, np.ndarray buffer, float freq=440.0, float ga
         ti += SAMPLE_TIME
         
     return buffer
+    
+def silence(int offset, int size, np.ndarray buffer ):
+    """Return a buffer with silence in it"""
+    assert buffer.dtype == DTYPE
+    assert buffer.shape[0] >= size
+    
+    for i in range(size):
+        buffer[i] = 0.0
 
+    return buffer
+    
+def noise(int offset, int size, np.ndarray buffer, gain=0.0 ):
+    """Return a buffer with white noise in it"""
+    assert buffer.dtype == DTYPE
+    assert buffer.shape[0] >= size
+    
+    cdef float multi = db(gain)
+    for i in range(size):
+        buffer[i] = (2.0*rand()-1.0)*multi
+
+    return buffer

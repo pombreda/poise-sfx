@@ -58,3 +58,30 @@ cdef frange( float var, float min, float max ):
             var -= wavelength*float(div)
             
     return var
+
+cdef int NUM_RAND_VALUES = 16384
+cdef np.ndarray RAND_TABLE = np.zeros([NUM_RAND_VALUES, 1], dtype=DTYPE)
+cdef int rand_offset = 0
+
+import random
+
+cdef fill_rand():
+    """this fills our static lookup array for our highspeed sin function"""
+    cdef int x
+    for x in range(NUM_RAND_VALUES):
+        RAND_TABLE[x] = random.random()
+    
+# run on import to fill table
+fill_rand()
+
+
+cdef float rand():
+    cdef float result
+    cdef int rand_offset
+
+    rand_offset+= 1
+    if rand_offset >= NUM_RAND_VALUES:
+        rand_offset = 0
+    #print rand_offset, NUM_RAND_VALUES
+    result = RAND_TABLE[rand_offset]
+    return result
