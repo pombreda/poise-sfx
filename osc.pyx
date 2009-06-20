@@ -154,6 +154,6 @@ def noise(int offset, int size, np.ndarray buffer, gain=0.0 ):
     
     cdef float multi = db(gain)
     for i in range(size):
-        buffer[i] = (2.0*rand()-1.0)*multi
+        buffer[i] = (2.0*crand()-1.0)*multi
 
     return buffer
