@@ -61,7 +61,7 @@ generates zeros. completely silent.
 
 {{{
 from poise.osc import noise
-gen = noice(gain)
+gen = noise(gain)
 }}}
 
 generates white noise.
