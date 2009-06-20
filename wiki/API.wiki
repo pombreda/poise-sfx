@@ -53,7 +53,7 @@ so for example, in the case above we could apply an envelope around the wave:
 {{{
 >>> gen = poise.osc.sine(freq=440, gain=-3)
 >>> gen2 = poise.envelope.adsr( gen, attack=0.1, decay=1.0, sustain=0.0, release=4.0 )
->>> gen2.send(100)[:100]
+>>> gen2.send(100)
 array([  0.00000000e+00,   6.46563917e-07,   1.29396554e-06,
          1.94005717e-06,   2.58268953e-06,   3.21970889e-06,
          3.84897835e-06,   4.46836660e-06,   5.07577775e-06,
