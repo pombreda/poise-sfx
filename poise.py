@@ -17,7 +17,6 @@ use like:
 
 import numpy, sys
 
-import ctypes, math
 import buffers
 import osc
 import envelope
