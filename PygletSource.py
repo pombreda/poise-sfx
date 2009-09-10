@@ -5,7 +5,7 @@ from pyglet.media.procedural import ProceduralSource, AudioData
 
 class PygletSource(ProceduralSource):
     def __init__(self, **kwargs):
-        super(PoiseSource,self).__init__(duration=99999999999999, **kwargs)
+        super(PygletSource,self).__init__(duration=99999999999999, **kwargs)
         
         # the presently playing oscilators
         self.oscillators=[]
