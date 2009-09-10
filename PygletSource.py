@@ -3,6 +3,7 @@ pyglet.options['audio'] = ('openal', 'silent')
 
 from pyglet.media.procedural import ProceduralSource, AudioData
 
+import numpy, sys
 import ctypes, math
 import buffers
 

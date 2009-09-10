@@ -14,9 +14,6 @@ use like:
 >>> 
 """
 
-
-import numpy, sys
-
 import buffers
 import osc
 import envelope
