@@ -2,8 +2,11 @@ from poise import *
 from pyglet.media import Player
 
 player = Player()
-poise = PoiseSource()
-player.queue(poise)
+
+from PygletSource import PygletSource
+source = PygletSource()
+
+player.queue(source)
 player.play()
 
 sfx = osc.noise(gain=0 )
