@@ -11,7 +11,7 @@ player.play()
 
 sfx = osc.noise(gain=0 )
 envsfx = envelope.adsr(sfx,attack=0.2,decay=0.2,sustain=0.2,release=2.0)
-poise.add(sfx, -1)
+source.add(sfx, -1)
 
 from pyglet import app
 from pyglet import window
