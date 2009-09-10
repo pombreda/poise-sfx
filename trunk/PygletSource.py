@@ -3,6 +3,8 @@ pyglet.options['audio'] = ('openal', 'silent')
 
 from pyglet.media.procedural import ProceduralSource, AudioData
 
+import buffers
+
 class PygletSource(ProceduralSource):
     def __init__(self, **kwargs):
         super(PygletSource,self).__init__(duration=99999999999999, **kwargs)
